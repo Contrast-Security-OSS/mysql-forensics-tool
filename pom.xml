@@ -7,6 +7,9 @@
   <version>1.0-SNAPSHOT</version>
   <name>mysql-forensics-tool</name>
   <url>http://maven.apache.org</url>
+  <properties>
+        <log4j2.version>2.1</log4j2.version>
+    </properties>
   <dependencies>
      <!--
      <dependency>
@@ -36,14 +39,22 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.6</version>
         </dependency>
-    <!--
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+
     <dependency>
-      <groupId>com.aspectsecurity.contrast</groupId>
-      <artifactId>contrast-teamserver</artifactId>
-      <classifier>classes</classifier>
-      <version>LATEST</version>
-    </dependency>
-    -->
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
     <dependency>
       <groupId>org.owasp.esapi</groupId>
       <artifactId>esapi</artifactId>

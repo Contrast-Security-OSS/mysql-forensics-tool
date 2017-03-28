@@ -3,30 +3,34 @@ package com.contrastsecurity;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class MySQLConnector {
 
-	private static Connection connection;
+	private static Connection connection = null;
 
 	public static Connection getConnection() throws IOException {
 
-		String installDir = System.getProperty("contrast.home");
-
-		EsapiFileDecryptor prop = new EsapiFileDecryptor();
-		prop.setEsapiProperties(FileFinder.fileFind(installDir, "ESAPI.properties"));
-		prop.setPropertyFile(FileFinder.fileFind(installDir, "database.properties"));
-
-		dbPass = prop.getProperty("jdbc.pass");
-		dbUser = prop.getProperty("jdbc.user");
-		dbPort = prop.getProperty("jdbc.port");
-		dbHost = prop.getProperty("jdbc.host");
-		dbSchema = prop.getProperty("jdbc.schema");
-
-		System.out.println(dbSchema);
-
-		connection = null;
+		try {
+			
+			String installDir = System.getProperty("contrast.home");
+	
+			EsapiFileDecryptor prop = new EsapiFileDecryptor();
+			prop.setEsapiProperties(FileFinder.fileFind(installDir, "ESAPI.properties"));
+			prop.setPropertyFile(FileFinder.fileFind(installDir, "database.properties"));
+	
+			dbPass = prop.getProperty("jdbc.pass");
+			dbUser = prop.getProperty("jdbc.user");
+			dbPort = prop.getProperty("jdbc.port");
+			dbHost = prop.getProperty("jdbc.host");
+			dbSchema = prop.getProperty("jdbc.schema");
+		
+		} catch (FileNotFoundException e){
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		try {
 

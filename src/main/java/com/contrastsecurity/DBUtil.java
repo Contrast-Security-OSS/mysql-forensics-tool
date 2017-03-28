@@ -11,28 +11,36 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
+
 public class DBUtil {
 
 	private static List<Map<String, Object>> listOfMaps = null;
 	private static Connection connection = null;
+	private static final Logger logger = LogManager.getLogger(DBUtil.class);
 
-	public DBUtil() throws FileNotFoundException, SQLException, IOException {
-		createConnection();
-	}
-
-	private static void createConnection() throws SQLException, FileNotFoundException, IOException {
+	private static void createConnection()  {
 		MySQLConnector db = new MySQLConnector();
-		connection = db.getConnection();
+		try {
+			connection = db.getConnection();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@SuppressWarnings("deprecation")
-	public static void resultSetToJson(String query, String param) throws SQLException {
-
+	public void resultSetToJson(String query, String param) throws SQLException {
+		createConnection();
 		try {
 			QueryRunner queryRunner = new QueryRunner();
 			listOfMaps = queryRunner.query(connection, query, param, new MapListHandler());
 			for (Map<String, Object> map : listOfMaps) {
-				System.out.println(new Gson().toJson(map));
+				//System.out.println(new Gson().toJson(map));
+				
+				
+				logger.info(new Gson().toJson(map));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -40,11 +48,13 @@ public class DBUtil {
 		connection.close();
 	}
 
-	public static void resultSetToJson(String query) throws SQLException {
+	public void resultSetToJson(String query) throws SQLException {
+		createConnection();
 		QueryRunner queryRunner = new QueryRunner();
 		listOfMaps = queryRunner.query(connection, query, new MapListHandler());
 		for (Map<String, Object> map : listOfMaps) {
-			System.out.println(new Gson().toJson(map));
+			//System.out.println(new Gson().toJson(map));
+			//logger.info(new Gson().toJson(map));
 		}
 		connection.close();
 	}

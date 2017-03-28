@@ -33,7 +33,6 @@ public class EsapiFileDecryptor {
 			SecurityConfiguration configuration = new DefaultSecurityConfiguration(esapiProps);
 			esapiProps.setProperty("ESAPI.Authenticator", NoopAuthenticator.class.getName());
 			esapiProps.setProperty("ESAPI.Logger", Log4JLogFactory.class.getName());
-			esapiProps.setProperty("LogLevel", "ERROR");
 			ESAPI.override(configuration);
 			propertiesObj = new ReferenceEncryptedProperties();
 			propertiesObj.load(new FileInputStream(propertyFile));

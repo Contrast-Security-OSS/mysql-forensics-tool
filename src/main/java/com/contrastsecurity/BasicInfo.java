@@ -6,6 +6,12 @@ import java.sql.SQLException;
 
 public class BasicInfo {
 
+	private static DBUtil dbCall;
+	
+	public BasicInfo ()  {
+		 dbCall = new DBUtil();
+	}
+	
 	public static void getTableSizes() throws Exception {
 
 		String installDir = System.getProperty("contrast.home");
@@ -16,17 +22,15 @@ public class BasicInfo {
 
 		String dbSchema = prop.getProperty("jdbc.schema");
 
-		String query = "SELECT  table_name AS `Table`, "
+		String parameterizedQuery = "SELECT  table_name AS `Table`, "
 				+ "round(((data_length + index_length) / 1024 / 1024), 2) `MB`, " + "index_length as 'Objects' "
 				+ "FROM information_schema.TABLES " + "WHERE table_schema = ? " + "order by index_length DESC";
 
-		DBUtil dbCall = new DBUtil();
-		dbCall.resultSetToJson(query, dbSchema);
+		dbCall.resultSetToJson(parameterizedQuery, dbSchema);
 
 	}
 
-	public static void getVersion() throws FileNotFoundException, SQLException, IOException {
-		DBUtil dbCall = new DBUtil();
+	public static void getVersion() throws SQLException {
 		dbCall.resultSetToJson("SELECT VERSION() as version");
 	}
 
@@ -36,12 +40,10 @@ public class BasicInfo {
 		getTableSizes();
 	}
 
-	private static void getGlobalStatusStats() throws SQLException, FileNotFoundException, IOException {
-		DBUtil dbCall = new DBUtil();
+	private static void getGlobalStatusStats() throws SQLException {	
 		dbCall.resultSetToJson("SHOW GLOBAL STATUS");
 
 	}
 
-	public static String nullParams = null;
 
 }
