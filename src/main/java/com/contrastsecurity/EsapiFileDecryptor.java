@@ -7,6 +7,7 @@ import org.owasp.esapi.reference.Log4JLogFactory;
 import org.owasp.esapi.reference.crypto.ReferenceEncryptedProperties;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 public class EsapiFileDecryptor {
@@ -26,7 +27,7 @@ public class EsapiFileDecryptor {
 
 	private static void decryptProperties() {
 
-		try {
+		try {			
 
 			Properties esapiProps = new Properties();
 			esapiProps.load(new FileInputStream(esapiProperties));
@@ -37,7 +38,7 @@ public class EsapiFileDecryptor {
 			propertiesObj = new ReferenceEncryptedProperties();
 			propertiesObj.load(new FileInputStream(propertyFile));
 
-		} catch (Exception e) {
+		} catch (IOException e) {
 
 			System.out.println("Not able to decrypt the file");
 			e.printStackTrace();

@@ -2,7 +2,7 @@ package com.contrastsecurity;
 
 import java.util.Scanner;
 
-public class ForensicsUtil {
+public class Agent {
 
 	public static void main(String[] args) throws Exception {
 
@@ -16,12 +16,18 @@ public class ForensicsUtil {
 		}
 
 		if (performanceEnabled != null && performanceEnabled.equals("true")) {
-			Migration.apply();
+			Migration migration = new Migration();
+			migration.apply();
 
 		}
 
-		BasicInfo mysqlInfo = new BasicInfo();
+		Metrics mysqlInfo = new Metrics();
 		mysqlInfo.stats();
+		
+		AdvancedMetrics advancedMysqlInfo = new AdvancedMetrics();
+		advancedMysqlInfo.stats();
+		
+		
 
 	}
 

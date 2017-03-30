@@ -4,14 +4,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class BasicInfo {
+public class Metrics {
 
 	private static DBUtil dbCall;
-	
-	public BasicInfo ()  {
-		 dbCall = new DBUtil();
+
+	public Metrics() {
+		dbCall = new DBUtil();
 	}
-	
+
 	public static void getTableSizes() throws Exception {
 
 		String installDir = System.getProperty("contrast.home");
@@ -40,10 +40,9 @@ public class BasicInfo {
 		getTableSizes();
 	}
 
-	private static void getGlobalStatusStats() throws SQLException {	
+	private static void getGlobalStatusStats() throws SQLException {
 		dbCall.resultSetToJson("SHOW GLOBAL STATUS");
 
 	}
-
 
 }

@@ -37,13 +37,19 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.6</version>
+            <version>5.1.40</version>
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>4.1.2</version>
+            <version>3.2.1</version>
         </dependency>
+<!-- https://mvnrepository.com/artifact/org.apache.ibatis/ibatis-core -->
+<dependency>
+    <groupId>org.apache.ibatis</groupId>
+    <artifactId>ibatis-core</artifactId>
+    <version>3.0</version>
+</dependency>
 
     <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -78,6 +84,21 @@
           <target>1.8</target>
         </configuration>
       </plugin>
+   
+    <plugin>
+      <artifactId>maven-assembly-plugin</artifactId>
+      <configuration>
+        <archive>
+          <manifest>
+            <mainClass>com.contrastsecurity.Agent</mainClass>
+          </manifest>
+        </archive>
+        <descriptorRefs>
+          <descriptorRef>jar-with-dependencies</descriptorRef>
+        </descriptorRefs>
+      </configuration>
+    </plugin>
+ 
     </plugins>
    </build>
 </project>
