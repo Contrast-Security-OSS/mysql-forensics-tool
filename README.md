@@ -113,7 +113,7 @@ InnoDB Metrics:
 
 Add the following to your CRON entry with the appropriate paths (See Warnings)
 
-	*/20 * * * * /path/to/java -Dcontrast.home=/path/to/contrast/home -Dperformance.enabled=true -jar /path/to/mysql-forensics-tool-1.0-jar-with-dependencies.jar > /path/to/contrast/home/logs/mysql_forensics.log
+	*/20 * * * * /path/to/java -Dcontrast.home=/path/to/contrast/home -Dperformance.enabled=true -jar /path/to/mysql-forensics-tool-1.0-jar-with-dependencies.jar >> /path/to/contrast/home/logs/mysql_forensics.log
 
 ## Warnings
 * Running this against your database may decrease performance
