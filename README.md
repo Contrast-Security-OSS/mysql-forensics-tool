@@ -33,7 +33,7 @@ terminal.
 ## Building 
 To build the runnable jar execute:
 
-	mvn clean compile package
+	mvn clean compile assembly:single
 
 In the target directory, you will see the following file:
 
