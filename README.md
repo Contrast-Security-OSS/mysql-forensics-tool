@@ -64,7 +64,7 @@ For some reason if we cannot your mysql client utility, add the following argume
 
 	-Dmysql.bin=/path/to/your/mysql/client/binary
 
-You should now see MySQL metrics in you terminal
+You should now see MySQL metrics in your terminal.
 
 ## Example Output
 
