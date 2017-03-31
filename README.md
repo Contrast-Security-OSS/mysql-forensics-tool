@@ -66,6 +66,49 @@ For some reason if we cannot your mysql client utility, add the following argume
 
 You should now see MySQL metrics in you terminal
 
+## Example Output
+
+Global Variables:
+
+	310317 13.17.34,723 INFO  getVersion => {"version":"5.6.28-log"}
+	310317 13.17.34,737 INFO  getVariables => {"Variable_name":"Aborted_clients","Value":"2"}
+	310317 13.17.34,738 INFO  getVariables => {"Variable_name":"Aborted_connects","Value":"3"}
+	310317 13.17.34,738 INFO  getVariables => {"Variable_name":"Binlog_cache_disk_use","Value":"0"}
+	310317 13.17.34,738 INFO  getVariables => {"Variable_name":"Binlog_cache_use","Value":"0"}
+	310317 13.17.34,738 INFO  getVariables => {"Variable_name":"Binlog_stmt_cache_disk_use","Value":"0"}
+	310317 13.17.34,739 INFO  getVariables => {"Variable_name":"Binlog_stmt_cache_use","Value":"0"}
+	310317 13.17.34,739 INFO  getVariables => {"Variable_name":"Bytes_received","Value":"10168073"}
+	310317 13.17.34,739 INFO  getVariables => {"Variable_name":"Bytes_sent","Value":"4705435"}
+	310317 13.17.34,764 INFO  getVariables => {"Variable_name":"Connection_errors_max_connections","Value":"0"}
+	310317 13.17.34,777 INFO  getVariables => {"Variable_name":"Max_used_connections","Value":"3"}
+
+
+Table Volumetrics:
+
+	310317 13.17.34,865 INFO  getTableSizes => {"Table":"artifacts_java","MB":318.19,"Objects":195608576}
+	310317 13.17.34,865 INFO  getTableSizes => {"Table":"vulnerabilities","MB":42.08,"Objects":2637824}
+	310317 13.17.34,865 INFO  getTableSizes => {"Table":"trace_data","MB":0.19,"Objects":180224}
+	310317 13.17.34,866 INFO  getTableSizes => {"Table":"notifications_messages","MB":0.16,"Objects":147456}
+	310317 13.17.34,866 INFO  getTableSizes => {"Table":"servers","MB":0.16,"Objects":147456}
+	310317 13.17.34,866 INFO  getTableSizes => {"Table":"organizations","MB":0.11,"Objects":98304}
+	310317 13.17.34,901 INFO  getTableSizes => {"Table":"onboarding_content_images","MB":0.03,"Objects":16384}
+	310317 13.17.34,908 INFO  getTableSizes => {"Table":"rules","MB":0.08,"Objects":16384}
+	310317 13.17.34,908 INFO  getTableSizes => {"Table":"webhooks","MB":0.03,"Objects":16384}
+	310317 13.17.34,909 INFO  getTableSizes => {"Table":"organization_remediation_policy_applications","MB":0.03,"Objects":16384}
+	310317 13.17.34,909 INFO  getTableSizes => {"Table":"agent_features","MB":0.03,"Objects":16384}
+	310317 13.17.34,909 INFO  getTableSizes => {"Table":"configuration_key","MB":0.03,"Objects":16384}
+	310317 13.17.34,909 INFO  getTableSizes => {"Table":"user_preferences","MB":0.03,"Objects":16384}
+
+InnoDB Metrics:
+
+	310317 13.17.36,497 INFO  getInnodbBufferStatsByTable => {"object_schema":"mysql","object_name":"innodb_index_stats","allocated":"624.00 KiB","data":"285.27 KiB","pages":39,"pages_hashed":21,"pages_old":0,"rows_cached":2283}
+	310317 13.17.36,499 INFO  getInnodbBufferStatsByTable => {"object_schema":"mysql","object_name":"innodb_table_stats","allocated":"48.00 KiB","data":"16.16 KiB","pages":3,"pages_hashed":1,"pages_old":0,"rows_cached":212}
+	310317 13.17.36,523 INFO  getIoGlobalByFileByBytes => {"file":"@@datadir/mysql/innodb_index_stats.ibd","count_read":43,"total_read":"688.00 KiB","avg_read":"16.00 KiB","count_write":72,"total_written":"1.12 MiB","avg_write":"16.00 KiB","total":"1.80 MiB","write_pct":62.61}
+	310317 13.17.36,523 INFO  getIoGlobalByFileByBytes => {"file":"@@datadir/mysql/innodb_table_stats.ibd","count_read":7,"total_read":"112.00 KiB","avg_read":"16.00 KiB","count_write":32,"total_written":"512.00 KiB","avg_write":"16.00 KiB","total":"624.00 KiB","write_pct":82.05}
+	310317 13.17.36,531 INFO  getIoGlobalByWaitByBytes => {"event_name":"innodb/innodb_data_file","total":3134,"total_latency":"427.78 ms","min_latency":"0 ps","avg_latency":"136.50 us","max_latency":"6.70 ms","count_read":1231,"total_read":"21.20 MiB","avg_read":"17.64 KiB","count_write":551,"total_written":"14.45 MiB","avg_written":"26.86 KiB","total_requested":"35.66 MiB"}
+	310317 13.17.36,531 INFO  getIoGlobalByWaitByBytes => {"event_name":"innodb/innodb_log_file","total":162,"total_latency":"57.63 ms","min_latency":"0 ps","avg_latency":"355.75 us","max_latency":"1.66 ms","count_read":6,"total_read":"68.00 KiB","avg_read":"11.33 KiB","count_write":75,"total_written":"95.50 KiB","avg_written":"1.27 KiB","total_requested":"163.50 KiB"}
+	310317 13.17.36,538 INFO  getIoGlobalByWaitByLatency => {"event_name":"innodb/innodb_data_file","total":3134,"total_latency":"427.78 ms","avg_latency":"136.50 us","max_latency":"6.70 ms","read_latency":"266.79 ms","write_latency":"11.00 ms","misc_latency":"149.99 ms","count_read":1231,"total_read":"21.20 MiB","avg_read":"17.64 KiB","count_write":551,"total_written":"14.45 MiB","avg_written":"26.86 KiB"}
+
 ## Want a continuous log?
 
 Add the following to your CRON entry with the appropriate paths (See Warnings)
