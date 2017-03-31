@@ -1,6 +1,6 @@
 <snippet>
   <content><![CDATA[
-# ${1:MySQL Forensic Tool for TeamServer}
+## MySQL Forensic Tool for TeamServer
 Want database metrics from your TeamServer installation? Great!
 
 This project will build a runnable jar that will allow you to log core
@@ -12,23 +12,23 @@ terminal.
 
 ## Example Metrics
 
-MySQL Version 
-Global Variables
-Table Volumetrics
-Host summary by File IO and Stages
-InnoDB Buffer Stats by Schema and Tables
-InnoDB Lock Waits
-IO Thread Latency
-Global IO by File 
-Global IO Wait by latency
-Lost Instrumention
-Schema index statistics
-Statements with errors or warnings
-Statements with run times in 95th percentile
+* MySQL Version
+* Global Variables
+* Table Volumetrics
+* Host summary by File IO and Stages
+* InnoDB Buffer Stats by Schema and Tables
+* InnoDB Lock Waits
+* IO Thread Latency
+* Global IO by File 
+* Global IO Wait by latency
+* Lost Instrumention
+* Schema index statistics
+* Statements with errors or warnings
+* Statements with run times in 95th percentile
 
-## Requirements
-1. Java 8 JDK or OpenJDK 8
-2. Maven 
+## Requirements for building this project
+* Java 8 JDK or OpenJDK 8
+* Maven 
 
 ## Building 
 To build the runnable jar execute:
@@ -58,7 +58,7 @@ metrics execute the following:
 	java -Dcontrast.home=/your/contrast/home -Dperformance.enabled=true \
 		-jar mysql-forensics-tool-1.0-jar-with-dependencies.jar
 
-For some reason if we cannot your mysql client utility specify it like this:
+For some reason if we cannot your mysql client utility, add the following argument to your command:
 
 	-Dmysql.bin=/path/to/your/mysql/client/binary
 
