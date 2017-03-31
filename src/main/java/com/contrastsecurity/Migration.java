@@ -15,16 +15,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.google.gson.Gson;
+
 
 public class Migration extends DefaultConfiguration {
 	
-	private static DBUtil dbCall;
+	private static final Logger logger = LogManager.getLogger(Migration.class);
 	private static List<String> trashCan;
-	
-	protected Migration() {
-		trashCan = new ArrayList<String>();
-		dbCall = new DBUtil();
-	}
+	private static String OS = System.getProperty("os.name").toLowerCase();
 
 	private static boolean utilExistsTest(String util) throws InterruptedException, IOException {
 		try {
@@ -39,8 +40,16 @@ public class Migration extends DefaultConfiguration {
 		} catch (Exception e) {
 			return false;
 		}
-	}
+	} 
 
+	private static String getOsExec () {
+		if ( OS.contains("win") ) {
+			return "cmd -c";
+		} else {
+			return "/bin/bash";
+		}
+	}
+	
 	private static String getRandomFile() {
 		String randomStr = RandomStringUtils.randomAlphanumeric(20).toUpperCase();
 		return System.getProperty("user.dir") + "/contrast-" + randomStr;
@@ -112,13 +121,15 @@ public class Migration extends DefaultConfiguration {
 		} else if (System.getProperty("mysql.bin") != null) {
 			mysqlUtility = System.getProperty("mysql.bin");
 		} else {
+			System.out.println("Please specify the JVM argument -Dmysql.bin to point your MySQL executable");
 			System.exit(1);
 		}
 		return mysqlUtility;
 	}	
 	
 	private boolean schemaExists (String schema) throws SQLException {
-		List<Map<String, Object>> listOfMaps = dbCall.query("show databases");
+		DBUtil queryExec = new DBUtil();
+		List<Map<String, Object>> listOfMaps = queryExec.query("show databases");
 		boolean exists = false;
 		for (Map<String, Object> map : listOfMaps ) {
 			if (map.containsValue(schema)) {
@@ -131,20 +142,24 @@ public class Migration extends DefaultConfiguration {
 	public void apply() throws 
 			SQLException, IOException, InterruptedException {
 		
+		trashCan = new ArrayList<String>();
+		
 		if( !schemaExists("sys") ) 
 				executeScript();
 				for (String file : trashCan) {
 					deleteFile(file);				
-			
 		}
 	}
 	
 	private static void executeScript () throws IOException, InterruptedException {
-		String[] cmd = new String[]{ "/bin/bash", getExecScript() };		
+		String[] cmd = new String[]{ getOsExec(), getExecScript() };		
 		Process p = Runtime.getRuntime().exec(cmd);
 	    p.waitFor();
 	    if (p.exitValue() != 0) {
-	    	System.out.println("I wasn't able to appy the migration");
+	    	logger.error( Thread.currentThread().getStackTrace()[2].getMethodName()
+					+ " => " + "The mysql-sys import script did not successfully apply to your MySQL" );					
+	    	logger.error( Thread.currentThread().getStackTrace()[2].getMethodName()
+					+ " => " + "Visit https://github.com/mysql/mysql-sys to learn how to manually apply this script" );
 	    }
 	    
         

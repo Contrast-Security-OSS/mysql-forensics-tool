@@ -1,7 +1,5 @@
 package com.contrastsecurity;
 
-import java.io.IOException;
-
 public class DefaultConfiguration {
 
 	protected static String getContrastHome() {

@@ -19,7 +19,7 @@ public class DBUtil {
 	private static Connection connection = null;
 	private static final Logger logger = LogManager.getLogger(DBUtil.class);
 
-	protected  DBUtil () {
+	public  DBUtil () {
 		MySQLConnector db = new MySQLConnector();
 		try {
 			connection = db.getConnection();
