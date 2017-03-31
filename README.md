@@ -1,7 +1,3 @@
-<snippet>
-  <content><![CDATA[
-## MySQL Forensic Tool for TeamServer
-
 MySQL Forensic Tool for TeamServer
 ===================
 
@@ -74,7 +70,7 @@ You should now see MySQL metrics in you terminal
 
 Add the following to your CRON entry with the appropriate paths (See Warnings)
 
-	*/5 * * * * /path/to/java -Dcontrast.home=/path/to/contrast/home -Dperformance.enabled=true -jar /path/to/mysql-forensics-tool-1.0-jar-with-dependencies.jar > /path/to/contrast/home/logs/mysql_forensics.log
+	*/20 * * * * /path/to/java -Dcontrast.home=/path/to/contrast/home -Dperformance.enabled=true -jar /path/to/mysql-forensics-tool-1.0-jar-with-dependencies.jar > /path/to/contrast/home/logs/mysql_forensics.log
 
 ## Warnings
 * Running this against your database may decrease performance
@@ -88,6 +84,3 @@ Add the following to your CRON entry with the appropriate paths (See Warnings)
 5. Submit a pull request :D
 ## Credits
 Thanks to Jeff Whalen.
-]]></content>
-  <tabTrigger>readme</tabTrigger>
-</snippet>
