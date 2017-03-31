@@ -1,51 +1,37 @@
 package com.contrastsecurity;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.ibatis.jdbc.ScriptRunner;
-import org.flywaydb.core.Flyway;
-
-import com.mysql.jdbc.Connection;
 
 public class Migration extends DefaultConfiguration {
 	
-	private static Connection connection = null;
-	private static String myCnf = null;
-	private static String executeScript = null;
-	private static String sqlScript = null;
-	private static String mysqlPath = null;
 	private static DBUtil dbCall;
+	private static List<String> trashCan;
 	
-	public Migration() {
+	protected Migration() {
+		trashCan = new ArrayList<String>();
 		dbCall = new DBUtil();
 	}
 
-	public static boolean utilExistsTest(String util) throws InterruptedException, IOException {
+	private static boolean utilExistsTest(String util) throws InterruptedException, IOException {
 		try {
 			
 			Process p = Runtime.getRuntime().exec(util);
 			p.waitFor();
-			int retVal = p.exitValue();
-			if ( retVal == 0)
+			if ( p.exitValue() == 0)
 				return true;
 			else {
 				return false;
@@ -55,50 +41,51 @@ public class Migration extends DefaultConfiguration {
 		}
 	}
 
-	private String getRandomFile() {
+	private static String getRandomFile() {
 		String randomStr = RandomStringUtils.randomAlphanumeric(20).toUpperCase();
-		return  System.getProperty("user.dir") + "/contrast-" + randomStr;
+		return System.getProperty("user.dir") + "/contrast-" + randomStr;
 	}
 	
-	private void generateSqlScript() throws IOException {
-		String fileName = getRandomFile() + ".sql";	
-		
-		InputStream inputStream = this.getClass().getClassLoader()
-				.getResourceAsStream("db/migration/sys_1.5.1_56_inline.sql");	
+	private static String getSqlScript() throws IOException {
+		String sqlScript = getRandomFile() + ".sql";
+		ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		InputStream input = loader.
+				getResourceAsStream("db/migration/sys_1.5.1_56_inline.sql");
 		OutputStream outputStream =
-                new FileOutputStream(new File(fileName));
-
+                new FileOutputStream(new File(sqlScript));
 		int read = 0;
 		byte[] bytes = new byte[1024];
-	
-		while ((read = inputStream.read(bytes)) != -1) {
+		while ((read = input.read(bytes)) != -1) {
 			outputStream.write(bytes, 0, read);
 		}
-		sqlScript = fileName;	
+		trashCan.add(sqlScript);
+		return sqlScript;
 	}
 
-	private void generateExecuteScript () throws IOException, InterruptedException {	
-		String cmd = String.format( "%s --defaults-extra-file=%s --binary-mode --protocol=tcp -h %s -P %s < %s", 
-						mysqlPath, myCnf, dbHost, dbPort, sqlScript);
-		String fileName = getRandomFile() + ".exec";	
-		Path path = Paths.get(fileName);
+	private static String getExecScript() throws IOException, InterruptedException {	
+		String execScript = getRandomFile() + ".exec";
+		Path path = Paths.get(execScript);
 		try (BufferedWriter writer = Files.newBufferedWriter(path)) 
 		{
-		    writer.write(cmd);
+		    writer.write(String.format( "%s --defaults-extra-file=%s --binary-mode "
+		    		+ "--protocol=tcp -h %s -P %s < %s", 
+					getMysqlPath(), getMyCnf(), getDbHost(), getDbPort(), getSqlScript()));
 		}
-		executeScript = fileName;
+		trashCan.add(execScript);
+		return execScript;
 	}
 	
-	private void generateMyCnf () throws IOException {
-		String fileName = System.getProperty("user.dir") + "/.my.cnf";
-		Path path = Paths.get(fileName);
+	private static String getMyCnf() throws IOException {
+		String myCnf = getRandomFile() + ".cnf";
+		Path path = Paths.get(myCnf);
 		try (BufferedWriter writer = Files.newBufferedWriter(path)) 
 		{
 		    writer.write("[client]\n");
-		    writer.write("user=" + dbUser + "\n");
-		    writer.write("password=" + dbPass + "\n");
+		    writer.write("user=" + getDbUser() + "\n");
+		    writer.write("password=" + getDbPass() + "\n");
 		}
-		this.myCnf = fileName;
+		trashCan.add(myCnf);
+		return myCnf;
 	}
 	
 	private static void deleteFile (String filePath) {	
@@ -110,29 +97,27 @@ public class Migration extends DefaultConfiguration {
 		}
 	}
 
-	private static void generateMysqlPath() throws InterruptedException, IOException {
+	private static String  getMysqlPath() throws InterruptedException, IOException  {
 		
 		String mysqlUtility = null;
 
 		if (utilExistsTest("mysql -V")) {
 			mysqlUtility = "mysql";
 		} else if (utilExistsTest("mysql.exe -V")) {
-			mysqlUtility = contrastHome + "mysql.exe";
-		} else if (utilExistsTest(contrastHome + "/mysql/bin/mysql -V")) {
-			mysqlUtility = contrastHome + "/mysql/bin/mysql";
-		} else if (utilExistsTest(contrastHome + "/mysql/bin/mysql.exe -V")) {
-			mysqlUtility = contrastHome + "/mysql/bin/mysql.exe";	
+			mysqlUtility = getContrastHome() + "/mysql.exe";
+		} else if (utilExistsTest(getContrastHome() + "/mysql/bin/mysql -V")) {
+			mysqlUtility = getContrastHome() + "/mysql/bin/mysql";
+		} else if (utilExistsTest(getContrastHome() + "/mysql/bin/mysql.exe -V")) {
+			mysqlUtility = getContrastHome() + "/mysql/bin/mysql.exe";	
 		} else if (System.getProperty("mysql.bin") != null) {
 			mysqlUtility = System.getProperty("mysql.bin");
 		} else {
-			System.out.println("Please specify -Dmysql.bin=/path/to/your/mysql/executable");
 			System.exit(1);
 		}
-		
-		mysqlPath = mysqlUtility;
+		return mysqlUtility;
 	}	
 	
-	public boolean schemaExists (String schema) throws SQLException {
+	private boolean schemaExists (String schema) throws SQLException {
 		List<Map<String, Object>> listOfMaps = dbCall.query("show databases");
 		boolean exists = false;
 		for (Map<String, Object> map : listOfMaps ) {
@@ -143,44 +128,25 @@ public class Migration extends DefaultConfiguration {
 		return exists;
 	}
 
-	public void apply() throws SQLException {
+	public void apply() throws 
+			SQLException, IOException, InterruptedException {
 		
-		try {
-			generateMysqlPath();
-			generateSqlScript();
-			generateMyCnf();
-			generateExecuteScript();	
-			executeScript();
+		if( !schemaExists("sys") ) 
+				executeScript();
+				for (String file : trashCan) {
+					deleteFile(file);				
+			
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			deleteFile(myCnf);
-			deleteFile(executeScript);
-			deleteFile(sqlScript);
-		}			
-
 	}
 	
-	public static void executeScript () throws IOException {
-		String[] cmd = new String[]{ "/bin/bash", executeScript };
-				
-		String s = null;		
+	private static void executeScript () throws IOException, InterruptedException {
+		String[] cmd = new String[]{ "/bin/bash", getExecScript() };		
 		Process p = Runtime.getRuntime().exec(cmd);
-        
-        BufferedReader stdInput = new BufferedReader(new 
-             InputStreamReader(p.getInputStream()));
-
-        BufferedReader stdError = new BufferedReader(new 
-             InputStreamReader(p.getErrorStream()));
-
-        while ((s = stdInput.readLine()) != null) {
-            System.out.println(s);
-        }
-        
-        while ((s = stdError.readLine()) != null) {
-            System.out.println(s);
-        }
+	    p.waitFor();
+	    if (p.exitValue() != 0) {
+	    	System.out.println("I wasn't able to appy the migration");
+	    }
+	    
         
 
 	}

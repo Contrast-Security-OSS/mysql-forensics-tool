@@ -4,33 +4,43 @@ import java.io.IOException;
 
 public class DefaultConfiguration {
 
-	protected static String contrastHome = System.getProperty("contrast.home");
-
-	protected static String dbPass = getEncryptedProp("jdbc.pass");
-
-	protected static String dbUser = getEncryptedProp("jdbc.user");
-
-	protected static String dbPort = getEncryptedProp("jdbc.port");
-
-	protected static String dbHost = getEncryptedProp("jdbc.host");
-
-	protected static String dbSchema = getEncryptedProp("jdbc.schema");
-
-	public static String getEsapiProperties() {
-		return FileFinder.fileFind(contrastHome, "ESAPI.properties");
+	protected static String getContrastHome() {
+		return System.getProperty("contrast.home");
+	}
+	
+	protected static String getDbPass() {
+		return getEncryptedProp("jdbc.pass");
 	}
 
-	public static String getDatabaseProperties() {
-		return FileFinder.fileFind(contrastHome, "database.properties");
+	protected static String getDbUser() {
+		return getEncryptedProp("jdbc.user");
 	}
 
-	public static String getEncryptedProp(String property) {
+	protected static String getDbPort() {
+		return getEncryptedProp("jdbc.port");
+	}
+	
+	protected static String getDbHost() {
+		return  getEncryptedProp("jdbc.host");
+	}
 
-		String esapiProperties = getEsapiProperties();
-		String databaseProperties = getDatabaseProperties();
+	protected static String getDbSchema() {
+		return  getEncryptedProp("jdbc.schema");
+	}
+
+	
+	protected static String getEsapiProperties() {
+		return FileFinder.fileFind(getContrastHome(), "ESAPI.properties");
+	}
+
+	protected static String getDatabaseProperties() {
+		return FileFinder.fileFind(getContrastHome(), "database.properties");
+	}
+
+	protected static String getEncryptedProp(String property) {
 		EsapiFileDecryptor prop = new EsapiFileDecryptor();
-		prop.setEsapiProperties(esapiProperties);
-		prop.setPropertyFile(databaseProperties);
+		prop.setEsapiProperties(getEsapiProperties());
+		prop.setPropertyFile(getDatabaseProperties());
 		return prop.getProperty(property);
 
 	}

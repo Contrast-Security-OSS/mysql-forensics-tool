@@ -15,17 +15,20 @@ public class Agent {
 			System.exit(1);
 		}
 
-		if (performanceEnabled != null && performanceEnabled.equals("true")) {
-			Migration migration = new Migration();
-			migration.apply();
-
-		}
+		
 
 		Metrics mysqlInfo = new Metrics();
 		mysqlInfo.stats();
 		
-		AdvancedMetrics advancedMysqlInfo = new AdvancedMetrics();
-		advancedMysqlInfo.stats();
+		if (performanceEnabled != null && performanceEnabled.equals("true")) {
+			Migration migration = new Migration();
+			migration.apply();
+			
+			AdvancedMetrics advancedMysqlInfo = new AdvancedMetrics();
+			advancedMysqlInfo.stats();
+
+		}
+		
 		
 		
 

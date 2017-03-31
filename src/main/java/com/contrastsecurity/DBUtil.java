@@ -19,7 +19,7 @@ public class DBUtil {
 	private static Connection connection = null;
 	private static final Logger logger = LogManager.getLogger(DBUtil.class);
 
-	private static void createConnection() {
+	protected  DBUtil () {
 		MySQLConnector db = new MySQLConnector();
 		try {
 			connection = db.getConnection();
@@ -28,37 +28,34 @@ public class DBUtil {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
-	public List<Map<String, Object>> query(String query) throws SQLException {
-		createConnection();
+	public  List<Map<String, Object>> query(String query) throws SQLException {
 		QueryRunner queryRunner = new QueryRunner();
 		listOfMaps = queryRunner.query(connection, query, new MapListHandler());
 		connection.close();
 		return listOfMaps;
-	}
+	}	
 	
 	@SuppressWarnings("deprecation")
-	public void resultSetToJson(String query, String param) throws SQLException {
+	public  void resultSetToJson(String query, String param) throws SQLException {
 		String methodCaller = Thread.currentThread().getStackTrace()[2].getMethodName();
-		createConnection();
 		QueryRunner queryRunner = new QueryRunner();
 		listOfMaps = queryRunner.query(connection, query, param, new MapListHandler());
 		for (Map<String, Object> map : listOfMaps) {
 			logger.info(methodCaller + " => " + new Gson().toJson(map));
 		}
 
-		connection.close();
 	}
 
-	public void resultSetToJson(String query) throws SQLException {
+	public  void resultSetToJson(String query) throws SQLException {
 		String methodCaller = Thread.currentThread().getStackTrace()[2].getMethodName();
-		
-		createConnection();
 		QueryRunner queryRunner = new QueryRunner();
 		listOfMaps = queryRunner.query(connection, query, new MapListHandler());
 		for (Map<String, Object> map : listOfMaps) {
 			logger.info(methodCaller + " => " + new Gson().toJson(map));
 		}
+	}
+	
+	public static void close () throws SQLException {
 		connection.close();
 	}
 

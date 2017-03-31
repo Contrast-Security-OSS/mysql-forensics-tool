@@ -13,8 +13,8 @@ public class MySQLConnector extends DefaultConfiguration {
 	public static Connection getConnection() throws IOException {
 
 		try {
-			String dbUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbSchema;
-			connection = DriverManager.getConnection(dbUrl, dbUser, dbPass);
+			String dbUrl = "jdbc:mysql://" + getDbHost() + ":" + getDbPort() + "/" + getDbSchema();
+			connection = DriverManager.getConnection(dbUrl, getDbUser(), getDbPass());
 			return connection;
 
 		} catch (SQLException e) {
