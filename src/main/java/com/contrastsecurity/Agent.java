@@ -27,7 +27,6 @@ public class Agent extends DefaultConfiguration {
 			AdvancedMetrics.generate();
 		}
 		
-		// Exit
 		System.exit(0);
 	}
 }
