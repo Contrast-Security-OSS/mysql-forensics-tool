@@ -7,7 +7,7 @@ public class Agent extends DefaultConfiguration {
     public static void main(String[] args) throws Exception {
 
         if (getContrastHome() == null) {
-            System.out.println("Please define JVM argument -Dcontrast.contrast to point "
+            System.out.println("Please define JVM argument -Dcontrast.home to point "
                     + "toward the installation directory of Contrast");
             System.exit(1);
         }
