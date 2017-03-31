@@ -27,7 +27,7 @@ terminal.
 * Statements with run times in 95th percentile
 
 ## Requirements for building this project
-* Java 8 JDK or OpenJDK 8
+* Java 8 JDK
 * Maven 
 
 ## Building 
