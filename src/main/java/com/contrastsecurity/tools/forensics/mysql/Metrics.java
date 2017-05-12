@@ -8,7 +8,7 @@ public class Metrics extends DefaultConfiguration {
 
     private static void getTableSizes() throws Exception {
         String parameterizedQuery = "SELECT  table_name AS `Table`, "
-                + "round(((data_length + index_length) / 1024 / 1024), 2) `MB`, " + "index_length as 'Objects' "
+                + "round(((data_length + index_length) / 1024 / 1024), 2) `MB`, " + "table_rows as 'Objects' "
                 + "FROM information_schema.TABLES " + "WHERE table_schema = ? " + "order by index_length DESC";
         queryExec.resultSetToJson(parameterizedQuery, getDbSchema());
 
